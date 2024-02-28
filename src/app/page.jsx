@@ -31,7 +31,7 @@ const Page = ({ searchParams }) => {
 
     fetchData();
   }, [searchParams.genre]);
-  console.log(data);
+  // console.log(data);
 
   return (
     <div className="flex items-center justify-center flex-wrap gap-3">
