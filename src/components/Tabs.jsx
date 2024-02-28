@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 const Tabs = () => {
   const searchParams = useSearchParams();
   const genre = searchParams.get("genre");
-  console.log(genre, "genre");
+  //console.log(genre, "genre");
   const tabs = [
     {
       name: "Popular",

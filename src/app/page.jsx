@@ -1,29 +1,45 @@
+"use client";
 import Movies from "@/components/Movies";
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-const page = async ({ searchParams }) => {
-  const apiKey = "0699b27cb753aebe336f5c310edef70b";
+const Page = ({ searchParams }) => {
+  const [data, setData] = useState([]);
 
-  try {
-    const res = await fetch(
-      `https://api.themoviedb.org/3/movie/popular?api_key=${apiKey}&language=en-US&page=1`
-    );
-    const data = await res.json();
-    console.log(data, "data");
+  useEffect(() => {
+    const fetchData = async () => {
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization:
+            "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNjk5YjI3Y2I3NTNhZWJlMzM2ZjVjMzEwZWRlZjcwYiIsInN1YiI6IjY1ZGM0OGI4ZWQyYWMyMDE4NzQxZDJjMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.XIS_1vl5DgFLuLW_QB15nFHHkuCBfegrfW63w4HlJ9o",
+        },
+      };
 
-    return (
-      <div>
-        <h1 className="text-3xl font-bold underline">
-          {data?.results?.map((dt, i) => (
-            <Movies key={i} dt={dt} />
-          ))}
-        </h1>
-      </div>
-    );
-  } catch (error) {
-    console.error("Fetch hatası:", error);
-    return null;
-  }
+      const res = await fetch(
+        `https://api.themoviedb.org/3/${
+          searchParams.genre
+            ? "movie/" + searchParams.genre
+            : "trending/all/day"
+        }?language=en-US&page=1`,
+        options
+      );
+
+      const jsonData = await res.json();
+      setData(jsonData.results);
+    };
+
+    fetchData();
+  }, [searchParams.genre]);
+  console.log(data);
+
+  return (
+    <div className="flex items-center justify-center flex-wrap gap-3">
+      {data?.map((dt, i) => (
+        <Movies dt={dt} key={i} />
+      ))}
+    </div>
+  );
 };
 
-export default page;
+export default Page;
